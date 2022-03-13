@@ -6,7 +6,7 @@
  * Date: March 7
  */
 
-package proj5BogatyrevCohenPeng;
+package src.proj5BogatyrevCohenPeng;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;

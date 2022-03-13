@@ -6,7 +6,7 @@
  * Date: March 7
  */
 
-package proj5BogatyrevCohenPeng;
+package src.proj5BogatyrevCohenPeng;
 
 import java.time.Duration;
 import java.util.Collection;
