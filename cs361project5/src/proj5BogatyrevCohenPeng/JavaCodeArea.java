@@ -1,5 +1,5 @@
 /*
- * File: MyCodeArea.java
+ * File: JavaCodeArea.java
  * Names: Erik Cohen, Philipp Bogatyrev, Ricky Peng
  * Class: CS 361
  * Project 5
@@ -23,6 +23,7 @@ import org.fxmisc.richtext.LineNumberFactory;
 import org.fxmisc.richtext.model.StyleSpans;
 import org.fxmisc.richtext.model.StyleSpansBuilder;
 import org.reactfx.Subscription;
+import java.io.File;
 
 
 /**
@@ -30,7 +31,7 @@ import org.reactfx.Subscription;
  * Code is from JavaKeywordsAsyncDemo.java in RichTextFX
  *
  */
-public class MyCodeArea {
+public class JavaCodeArea {
 
     private static final String[] KEYWORDS = new String[] {
             "abstract", "assert", "boolean", "break", "byte",
@@ -44,6 +45,8 @@ public class MyCodeArea {
             "switch", "synchronized", "this", "throw", "throws",
             "transient", "try", "void", "volatile", "while", "var"
     };
+
+    public File file;
 
     private static final String KEYWORD_PATTERN = "\\b("
             + String.join("|", KEYWORDS) + ")\\b";
@@ -67,6 +70,10 @@ public class MyCodeArea {
                     + "|(?<COMMENT>" + COMMENT_PATTERN + ")"
                     + "|(?<INTEGER>" + INTEGER_PATTERN + ")"
     );
+
+    public void setFile(File file){
+        this.file = file;
+    }
 
     // optional sample code to test key word highlighting.
     private static final String SAMPLE_CODE = String.join("\n", new String[] {
@@ -96,7 +103,7 @@ public class MyCodeArea {
     private CodeArea codeArea;
     private ExecutorService executor;
 
-    public MyCodeArea() {
+    public JavaCodeArea() {
         executor = Executors.newSingleThreadExecutor();
         codeArea = new CodeArea();
         codeArea.setParagraphGraphicFactory(LineNumberFactory.get(codeArea));
@@ -121,9 +128,9 @@ public class MyCodeArea {
 
     }
 
-    public CodeArea getCodeArea() {
-        return this.codeArea;
-    }
+    public CodeArea getCodeArea() {return this.codeArea;}
+
+    public void setCodeArea(CodeArea codeArea) {this.codeArea = codeArea;}
 
 
     private Task<StyleSpans<Collection<String>>> computeHighlightingAsync() {

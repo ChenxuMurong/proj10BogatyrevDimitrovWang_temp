@@ -14,7 +14,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.OutputStreamWriter;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
@@ -94,8 +93,9 @@ public class Controller {
         runButton.setDisable(true);
         compileButton.setDisable(true);
         stopButton.setDisable(true);
-        MyCodeArea myCodeArea = new MyCodeArea();
-        CodeArea codeArea = myCodeArea.getCodeArea();
+        //JavaCodeArea javaCodeArea = new JavaCodeArea();
+        //CodeArea codeArea = javaCodeArea.getCodeArea();
+        CodeArea codeArea = new CodeArea();
         initialTab.setContent(new VirtualizedScrollPane<>(codeArea));
 
         compileButton.disableProperty().bind(noTabs());
@@ -307,8 +307,8 @@ public class Controller {
         });
 
         // create a code area
-        MyCodeArea myCodeArea = new MyCodeArea();
-        CodeArea codeArea = myCodeArea.getCodeArea();
+        JavaCodeArea javaCodeArea = new JavaCodeArea();
+        CodeArea codeArea = javaCodeArea.getCodeArea();
         newTab.setContent(new VirtualizedScrollPane<>(codeArea));
         // add new tab to the tabPane
         tabPane.getTabs().add(newTab);
@@ -364,6 +364,9 @@ public class Controller {
                 // update savedContents field
                 this.savedContents.put(getSelectedTab(), content);
                 this.savedPaths.put(getSelectedTab(), selectedFile.getPath());
+
+                //getSelectedTextBox().setFile(File(selectedFile.getPath()));
+
             } catch (IOException e) {
                 Alert alertBox = new Alert(Alert.AlertType.ERROR);
                 alertBox.setHeaderText("File Opening Error");
