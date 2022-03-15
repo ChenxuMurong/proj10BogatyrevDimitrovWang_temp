@@ -28,6 +28,7 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.scene.Node;
 import javafx.scene.control.*;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Button;
@@ -97,7 +98,8 @@ public class Controller {
         dialog.showAndWait();
         //JavaCodeArea javaCodeArea = new JavaCodeArea();
         //CodeArea codeArea = javaCodeArea.getCodeArea();
-        CodeArea codeArea = new CodeArea();
+        CodeArea codeArea = new JavaCodeArea().getCodeArea();
+
         initialTab.setContent(new VirtualizedScrollPane<>(codeArea));
 
         compileButton.disableProperty().bind(noTabs());
