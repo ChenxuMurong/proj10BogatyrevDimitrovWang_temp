@@ -34,16 +34,13 @@ import java.io.File;
 public class PythonCodeArea {
 
     private static final String[] KEYWORDS = new String[] {
-            "abstract", "assert", "boolean", "break", "byte",
-            "case", "catch", "char", "class", "const",
-            "continue", "default", "do", "double", "else",
-            "enum", "extends", "final", "finally", "float",
-            "for", "goto", "if", "implements", "import",
-            "instanceof", "int", "interface", "long", "native",
-            "new", "package", "private", "protected", "public",
-            "return", "short", "static", "strictfp", "super",
-            "switch", "synchronized", "this", "throw", "throws",
-            "transient", "try", "void", "volatile", "while", "var"
+    "False",	"await",	"else", "import", "pass",
+    "None", "break",	"except",	"in",	"raise",
+    "True",	"class",	"finally",	"is",	"return",
+    "and",	"continue",	"for",	"lambda",	"try",
+    "as",	"def",	"from",	"nonlocal",	"while",
+    "assert",	"del",	"global",	"not",	"with",
+    "async", "elif", "if", "or", "yield"
     };
 
     public File file;
