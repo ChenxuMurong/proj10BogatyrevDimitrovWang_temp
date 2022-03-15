@@ -93,6 +93,8 @@ public class Controller {
         runButton.setDisable(true);
         compileButton.setDisable(true);
         stopButton.setDisable(true);
+        Dialog dialog = DialogOptions.getFileTypeDialog();
+        dialog.showAndWait();
         //JavaCodeArea javaCodeArea = new JavaCodeArea();
         //CodeArea codeArea = javaCodeArea.getCodeArea();
         CodeArea codeArea = new CodeArea();

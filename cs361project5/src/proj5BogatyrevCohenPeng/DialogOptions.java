@@ -11,6 +11,7 @@ package src.proj5BogatyrevCohenPeng;
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
+import javafx.scene.control.Button;
 
 /**
  * Collection of prebuilt Dialog options
@@ -31,6 +32,21 @@ public class DialogOptions {
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         return dialog;
     }
+
+    public static Dialog getFileTypeDialog(){
+        // create a new dialog
+        Dialog dialog = new Dialog();
+        //Button java = new Button("Java");
+        //dialog.getDialogPane().setContent(java);
+        dialog.setContentText("Which type of file would you like to create?");
+        // add a close button so that dialog closing rule is fulfilled
+        dialog.getDialogPane().getButtonTypes().add(new ButtonType("Java"));
+        dialog.getDialogPane().getButtonTypes().add(new ButtonType("Python"));
+
+
+        return dialog;
+    }
+
 
     /**
      * Unsaved changes dialog used when compiling, exiting, and
