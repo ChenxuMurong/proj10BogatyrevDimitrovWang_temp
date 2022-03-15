@@ -125,12 +125,8 @@ public class Controller {
                             PythonCodeArea pythonCodeArea = new PythonCodeArea();
                             vsp = (VirtualizedScrollPane) getSelectedTab().getContent();
                             oldArea = (CodeArea) vsp.getContent();
-                            newArea = new CodeArea();
-                            newArea.replaceText(oldArea.getText());
-                            pythonCodeArea.setCodeArea(newArea);
-                            getSelectedTab().setContent(new VirtualizedScrollPane<>(newArea));
-
-                            System.out.println(langBox.getSelectionModel().getSelectedItem().toString());
+                            pythonCodeArea.getCodeArea().replaceText(oldArea.getText());
+                            getSelectedTab().setContent(new VirtualizedScrollPane<>(pythonCodeArea.getCodeArea()));
                             break;
                     }
                 }
