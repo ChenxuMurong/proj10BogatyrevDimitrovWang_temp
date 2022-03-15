@@ -119,10 +119,16 @@ public class Controller {
                             JavaCodeArea javaCodeArea = new JavaCodeArea();
                             vsp = (VirtualizedScrollPane) getSelectedTab().getContent();
                             oldArea = (CodeArea) vsp.getContent();
-                            newArea = new CodeArea();
-                            newArea.replaceText(oldArea.getText());
-                            javaCodeArea.setCodeArea(newArea);
-                            getSelectedTab().setContent(new VirtualizedScrollPane<>(newArea));
+                            //newArea = new CodeArea();
+                            //newArea.replaceText(oldArea.getText());
+                            //javaCodeArea.setCodeArea(newArea);
+                            javaCodeArea.getCodeArea().replaceText(oldArea.getText());
+                            getSelectedTab().setContent(new VirtualizedScrollPane<>(javaCodeArea.getCodeArea()));
+
+                            //JavaCodeArea javaCodeArea = new JavaCodeArea();
+
+
+
 
                             //getSelectedTab().setContent(new VirtualizedScrollPane<>(new JavaCodeArea().getCodeArea()));
                             //CodeArea cd = (CodeArea) getSelectedTab().getContent();
