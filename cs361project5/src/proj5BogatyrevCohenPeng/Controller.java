@@ -112,28 +112,14 @@ public class Controller {
             public void changed(ObservableValue observable, Object oldValue, Object newValue) {
                 if (oldValue != newValue){
                     CodeArea oldArea;
-                    CodeArea newArea;
                     VirtualizedScrollPane vsp;
                     switch(langBox.getSelectionModel().getSelectedItem().toString()){
                         case "Java":
                             JavaCodeArea javaCodeArea = new JavaCodeArea();
                             vsp = (VirtualizedScrollPane) getSelectedTab().getContent();
                             oldArea = (CodeArea) vsp.getContent();
-                            //newArea = new CodeArea();
-                            //newArea.replaceText(oldArea.getText());
-                            //javaCodeArea.setCodeArea(newArea);
                             javaCodeArea.getCodeArea().replaceText(oldArea.getText());
                             getSelectedTab().setContent(new VirtualizedScrollPane<>(javaCodeArea.getCodeArea()));
-
-                            //JavaCodeArea javaCodeArea = new JavaCodeArea();
-
-
-
-
-                            //getSelectedTab().setContent(new VirtualizedScrollPane<>(new JavaCodeArea().getCodeArea()));
-                            //CodeArea cd = (CodeArea) getSelectedTab().getContent();
-
-                            System.out.println(langBox.getSelectionModel().getSelectedItem().toString());
                             break;
                         case "Python":
                             PythonCodeArea pythonCodeArea = new PythonCodeArea();
