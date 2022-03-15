@@ -25,6 +25,7 @@
 <?import org.fxmisc.flowless.VirtualizedScrollPane?>
 <?import org.fxmisc.richtext.StyleClassedTextArea?>
 
+<?import javafx.scene.control.ComboBox?>
 <AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <!-- make menu bar expand to fill the window if user resizes window  -->
@@ -131,7 +132,7 @@
                     </tabs>
                 </TabPane>
                 <Separator id="separator" />
-
+                <ComboBox fx:id="comboBox"/>
                 <VirtualizedScrollPane fx:id="consoleScrollPane" prefHeight="120.0" 
                     prefWidth="1200.0">
                     <content>

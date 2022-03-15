@@ -74,6 +74,9 @@ public class Controller {
     @FXML
     private MenuItem saveMI, saveAsMI, closeMI; // menu items
 
+    @FXML
+    private ComboBox comboBox;
+
     // List of saved tabs and their content
     private HashMap<Tab, String> savedContents = new HashMap<>();
     // List of saved tabs and their saving path
@@ -93,15 +96,16 @@ public class Controller {
         runButton.setDisable(true);
         compileButton.setDisable(true);
         stopButton.setDisable(true);
-        Dialog dialog = DialogOptions.getFileTypeDialog();
-        dialog.showAndWait();
-        //JavaCodeArea javaCodeArea = new JavaCodeArea();
-        //CodeArea codeArea = javaCodeArea.getCodeArea();
-        CodeArea codeArea = new CodeArea();
+
+        JavaCodeArea javaCodeArea = new JavaCodeArea();
+        CodeArea codeArea = javaCodeArea.getCodeArea();
+        //CodeArea codeArea = new CodeArea();
         initialTab.setContent(new VirtualizedScrollPane<>(codeArea));
 
         compileButton.disableProperty().bind(noTabs());
         runButton.disableProperty().bind(noTabs());
+
+        comboBox.getItems().setAll("Java", "Python");
     }
 
     /**
