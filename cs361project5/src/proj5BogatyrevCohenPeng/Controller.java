@@ -16,7 +16,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -373,11 +375,9 @@ public class Controller {
             initialDir = new File("./");
         }
         fileChooser.setInitialDirectory(initialDir);
+        List<String> extensionList = Arrays.asList(new String[]{"*.txt", "*.fxml", "*.css", "*.java"});
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Text Files", "*.txt"),
-                new FileChooser.ExtensionFilter("FXML Files", "*.fxml"),
-                new FileChooser.ExtensionFilter("CSS Files", "*.css"),
-                new FileChooser.ExtensionFilter("Java Files", "*.java"));
+                new FileChooser.ExtensionFilter("Text Files", extensionList));
         File selectedFile = fileChooser.showOpenDialog(tabPane.getScene().getWindow());
         // if user selects a file (instead of pressing cancel button
         if (selectedFile != null) {
@@ -550,11 +550,9 @@ public class Controller {
     private void handleSaveAs(ActionEvent event) {
         // create a new fileChooser
         FileChooser fileChooser = new FileChooser();
+        List<String> extensionList = Arrays.asList(new String[]{"*.txt", "*.fxml", "*.css", "*.java"});
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Text Files", "*.txt"),
-                new FileChooser.ExtensionFilter("FXML Files", "*.fxml"),
-                new FileChooser.ExtensionFilter("CSS Files", "*.css"),
-                new FileChooser.ExtensionFilter("Java Files", "*.java"));
+                new FileChooser.ExtensionFilter("Text Files", extensionList));
         File fileToSave = fileChooser.showSaveDialog(tabPane.getScene().getWindow());
         // if user did not choose CANCEL
         if (fileToSave != null) {
