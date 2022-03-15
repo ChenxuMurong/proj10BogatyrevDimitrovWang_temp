@@ -26,6 +26,8 @@
 <?import org.fxmisc.richtext.StyleClassedTextArea?>
 
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.collections.FXCollections?>
+<?import java.lang.String?>
 <AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <!-- make menu bar expand to fill the window if user resizes window  -->
@@ -132,7 +134,15 @@
                     </tabs>
                 </TabPane>
                 <Separator id="separator" />
-                <ComboBox fx:id="comboBox"/>
+                <ComboBox fx:id = "langBox" value="Java">
+                    <items>
+                        <FXCollections fx:factory="observableArrayList">
+                            <String fx:value="Python"/>
+                            <String fx:value="Java"/>
+                        </FXCollections>
+                    </items>
+                </ComboBox>
+
                 <VirtualizedScrollPane fx:id="consoleScrollPane" prefHeight="120.0" 
                     prefWidth="1200.0">
                     <content>
