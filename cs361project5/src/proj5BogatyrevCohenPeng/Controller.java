@@ -24,6 +24,8 @@ import java.util.concurrent.Executors;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.beans.binding.BooleanBinding;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -75,7 +77,7 @@ public class Controller {
     private MenuItem saveMI, saveAsMI, closeMI; // menu items
 
     @FXML
-    private ComboBox comboBox;
+    private ComboBox langBox;
 
     // List of saved tabs and their content
     private HashMap<Tab, String> savedContents = new HashMap<>();
@@ -98,14 +100,50 @@ public class Controller {
         stopButton.setDisable(true);
 
         JavaCodeArea javaCodeArea = new JavaCodeArea();
+        PythonCodeArea pythonCodeArea = new PythonCodeArea();
         CodeArea codeArea = javaCodeArea.getCodeArea();
-        //CodeArea codeArea = new CodeArea();
         initialTab.setContent(new VirtualizedScrollPane<>(codeArea));
 
         compileButton.disableProperty().bind(noTabs());
         runButton.disableProperty().bind(noTabs());
 
-        comboBox.getItems().setAll("Java", "Python");
+        langBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                if (oldValue != newValue){
+                    CodeArea oldArea;
+                    CodeArea newArea;
+                    VirtualizedScrollPane vsp;
+                    switch(langBox.getSelectionModel().getSelectedItem().toString()){
+                        case "Java":
+                            JavaCodeArea javaCodeArea = new JavaCodeArea();
+                            vsp = (VirtualizedScrollPane) getSelectedTab().getContent();
+                            oldArea = (CodeArea) vsp.getContent();
+                            newArea = new CodeArea();
+                            newArea.replaceText(oldArea.getText());
+                            javaCodeArea.setCodeArea(newArea);
+                            getSelectedTab().setContent(new VirtualizedScrollPane<>(newArea));
+
+                            //getSelectedTab().setContent(new VirtualizedScrollPane<>(new JavaCodeArea().getCodeArea()));
+                            //CodeArea cd = (CodeArea) getSelectedTab().getContent();
+
+                            System.out.println(langBox.getSelectionModel().getSelectedItem().toString());
+                            break;
+                        case "Python":
+                            PythonCodeArea pythonCodeArea = new PythonCodeArea();
+                            vsp = (VirtualizedScrollPane) getSelectedTab().getContent();
+                            oldArea = (CodeArea) vsp.getContent();
+                            newArea = new CodeArea();
+                            newArea.replaceText(oldArea.getText());
+                            pythonCodeArea.setCodeArea(newArea);
+                            getSelectedTab().setContent(new VirtualizedScrollPane<>(newArea));
+
+                            System.out.println(langBox.getSelectionModel().getSelectedItem().toString());
+                            break;
+                    }
+                }
+            }
+        });
     }
 
     /**
