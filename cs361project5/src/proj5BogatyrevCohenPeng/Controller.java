@@ -210,32 +210,58 @@ public class Controller {
      */
     @FXML
     void handleRunButton(ActionEvent event) {
+
         if (getSelectedTab() == null) return;
         handleCompileButton(event);
-
         if(! cancel_compiler){
             File savedFile = new File(this.savedPaths.get(getSelectedTab()));
-            try {
-                // prepare classpath location
-                int endOfPath = 
-                    savedFile.getPath().length() - savedFile.getName().length();
+            switch(langBox.getSelectionModel().getSelectedItem().toString()){
+                case "Java":
+                    try {
+                        // prepare classpath location
+                        int endOfPath =
+                            savedFile.getPath().length() - savedFile.getName().length();
 
-                String pathWithoutFile = savedFile.getPath().substring(0, endOfPath);
+                        String pathWithoutFile = savedFile.getPath().substring(0, endOfPath);
 
-                String fileWithoutExtension = 
-                    savedFile.getName().substring(0,savedFile.getName().length()-5);
+                        String fileWithoutExtension =
+                            savedFile.getName().substring(0,savedFile.getName().length()-5);
 
-                console.appendText(
-                    "java " + "-cp " + pathWithoutFile + " " 
-                    + fileWithoutExtension + "\n");
-                runProcess("java " + "-cp " + pathWithoutFile + " " + fileWithoutExtension);
+                        console.appendText(
+                            "java " + "-cp " + pathWithoutFile + " "
+                            + fileWithoutExtension + "\n");
+                        runProcess("java " + "-cp " + pathWithoutFile + " " + fileWithoutExtension);
 
-            } catch (Exception e) {
-                Alert alertBox = new Alert(Alert.AlertType.ERROR);
-                alertBox.setHeaderText("Process Interrupted");
-                alertBox.setContentText(e.toString());
-                alertBox.show();
-            }
+                    } catch (Exception e) {
+                        Alert alertBox = new Alert(Alert.AlertType.ERROR);
+                        alertBox.setHeaderText("Process Interrupted");
+                        alertBox.setContentText(e.toString());
+                        alertBox.show();
+                    }
+                case "Python":
+                    try {
+                        // prepare classpath location
+                        int endOfPath =
+                                savedFile.getPath().length() - savedFile.getName().length();
+
+                        String pathWithoutFile = savedFile.getPath().substring(0, endOfPath);
+
+                        String fileWithoutExtension =
+                                savedFile.getName().substring(0,savedFile.getName().length()-3);
+
+                        console.appendText(
+                                "python3 " + pathWithoutFile +
+                                        savedFile.getName() + "\n");
+                        runProcess("python3 " + pathWithoutFile
+                                + savedFile.getName() + "\n");
+
+                    } catch (Exception e) {
+                        Alert alertBox = new Alert(Alert.AlertType.ERROR);
+                        alertBox.setHeaderText("Process Interrupted");
+                        alertBox.setContentText(e.toString());
+                        alertBox.show();
+                    }
+        }
         }
     }
 
@@ -377,6 +403,7 @@ public class Controller {
                 new FileChooser.ExtensionFilter("Text Files", "*.txt"),
                 new FileChooser.ExtensionFilter("FXML Files", "*.fxml"),
                 new FileChooser.ExtensionFilter("CSS Files", "*.css"),
+                new FileChooser.ExtensionFilter("Python Files", "*.py"),
                 new FileChooser.ExtensionFilter("Java Files", "*.java"));
         File selectedFile = fileChooser.showOpenDialog(tabPane.getScene().getWindow());
         // if user selects a file (instead of pressing cancel button
@@ -554,7 +581,8 @@ public class Controller {
                 new FileChooser.ExtensionFilter("Text Files", "*.txt"),
                 new FileChooser.ExtensionFilter("FXML Files", "*.fxml"),
                 new FileChooser.ExtensionFilter("CSS Files", "*.css"),
-                new FileChooser.ExtensionFilter("Java Files", "*.java"));
+                new FileChooser.ExtensionFilter("Java Files", "*.java"),
+                new FileChooser.ExtensionFilter("Python Files", "*.py"));
         File fileToSave = fileChooser.showSaveDialog(tabPane.getScene().getWindow());
         // if user did not choose CANCEL
         if (fileToSave != null) {
