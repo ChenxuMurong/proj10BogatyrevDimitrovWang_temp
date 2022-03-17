@@ -149,7 +149,7 @@ public class Controller {
     void handleCompileButton(ActionEvent event) {
         cancel_compiler = false;
         if (!selectedTabIsSaved()) {
-            // prommts user to save before proceeding to compile
+            // prompts user to save before proceeding to compile
             Dialog dialog = DialogOptions.getUnsavedChangesDialog(
                     getSelectedTab().getText(), "compile");
 
@@ -168,6 +168,7 @@ public class Controller {
         if (!this.savedPaths.containsKey(getSelectedTab())){
             // if no file corresponding to this tab exists in savedPaths hashmap,
             // stop compiling and alert user
+            cancel_compiler = true;
             Alert compileBeforeSaveAlert = new Alert(Alert.AlertType.ERROR);
             compileBeforeSaveAlert.setHeaderText("Compilation Unsuccessful");
             compileBeforeSaveAlert.setContentText("Target file does not exist. Please" +
@@ -228,12 +229,6 @@ public class Controller {
     void handleRunButton(ActionEvent event) {
         if (getSelectedTab() == null) return;
         handleCompileButton(event);
-
-        if (!this.savedPaths.containsKey(getSelectedTab()))
-            // (same as handleCompileButton)
-            // if no file corresponding to this tab exists in savedPaths hashmap,
-            // abort and alert user
-            return;
 
 
         if(! cancel_compiler){
