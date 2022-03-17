@@ -16,7 +16,7 @@
 
 ---------------  S U M M A R Y ------------
 
-Command Line: -javaagent:/Applications/IntelliJ IDEA CE.app/Contents/lib/idea_rt.jar=56701:/Applications/IntelliJ IDEA CE.app/Contents/bin -Dfile.encoding=UTF-8 src.proj5BogatyrevCohenPeng.Main
+Command Line: -javaagent:/Applications/IntelliJ IDEA CE.app/Contents/lib/idea_rt.jar=56701:/Applications/IntelliJ IDEA CE.app/Contents/bin -Dfile.encoding=UTF-8 proj6BogatyrevDimitrovWang.proj5BogatyrevCohenPeng.Main
 
 Host: MacBookAir10,1 x86_64 2400 MHz, 8 cores, 8G, Darwin 21.2.0
 Time: Mon Mar 14 21:18:19 2022 EDT elapsed time: 47 seconds (0d 0h 0m 47s)
@@ -731,7 +731,7 @@ Dynamic libraries:
 
 VM Arguments:
 jvm_args: -javaagent:/Applications/IntelliJ IDEA CE.app/Contents/lib/idea_rt.jar=56701:/Applications/IntelliJ IDEA CE.app/Contents/bin -Dfile.encoding=UTF-8 
-java_command: src.proj5BogatyrevCohenPeng.Main
+java_command: proj6BogatyrevDimitrovWang.proj5BogatyrevCohenPeng.Main
 java_class_path (initial): /Users/baronwang/IdeaProjects/project6DimitrovWangBogatyrev/out/production/project6DimitrovWangBogatyrev:/Users/baronwang/IdeaProjects/project6DimitrovWangBogatyrev/richtextfx-fat-0.10.7.jar
 Launcher Type: SUN_STANDARD
 

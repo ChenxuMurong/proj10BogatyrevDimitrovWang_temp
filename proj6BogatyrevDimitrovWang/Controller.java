@@ -1,12 +1,12 @@
 /*
  * File: Controller.java
- * Names: Philipp Bogatyrev, Erik Cohen, Ricky Peng
+ * Names: Philipp Bogatyrev, Anton Dimitrov, Baron Wang
  * Class: CS 361
- * Project 5
- * Date: March 7
+ * Project 6
+ * Date: March 18
  */
 
-package src.proj5BogatyrevCohenPeng;
+package proj6BogatyrevDimitrovWang;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -44,8 +44,10 @@ import java.io.Reader;
 
 /**
  * Controller class contains handler methods for buttons and menu items
+ * @author Philipp Bogatyrev, Anton Dimitrov, Baron Wang
  *
  */
+
 public class Controller {
 
     @FXML

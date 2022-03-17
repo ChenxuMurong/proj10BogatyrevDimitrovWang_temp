@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-    File: Main.fxml
-    Names: Erik Cohen, Philipp Bogatyrev, Ricky Peng
-    Class: CS 361
-    Project 5
-    Date: March 7
+
+  File: Controller.java
+  Names: Philipp Bogatyrev, Anton Dimitrov, Baron Wang
+  Class: CS 361
+  Project 6
+  Date: March 18
 
 -->
 <!-- set primary scene of size 800*600 -->
@@ -28,6 +29,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
+
 <AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <!-- make menu bar expand to fill the window if user resizes window  -->
@@ -143,10 +145,10 @@
                     </items>
                 </ComboBox>
 
-                <VirtualizedScrollPane fx:id="consoleScrollPane" prefHeight="120.0" 
-                    prefWidth="1200.0">
+                <VirtualizedScrollPane fx:id="consoleScrollPane" prefHeight="120.0"
+                    prefWidth="1200.0" AnchorPane.bottomAnchor="0" VBox.vgrow="ALWAYS">
                     <content>
-                        <StyleClassedTextArea fx:id="console" wrapText="true" />
+                        <StyleClassedTextArea fx:id="console"  wrapText="true" />
                         >
                     </content>
                 </VirtualizedScrollPane>

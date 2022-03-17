@@ -1,12 +1,12 @@
 /*
- * File: Main.java
- * Names: Philipp Bogatyrev, Erik Cohen, Ricky Peng
+ * File: Controller.java
+ * Names: Philipp Bogatyrev, Anton Dimitrov, Baron Wang
  * Class: CS 361
- * Project 5
- * Date: March 7
+ * Project 6
+ * Date: March 18
  */
 
-package src.proj5BogatyrevCohenPeng;
+package proj6BogatyrevDimitrovWang;
 
 import javafx.application.Application;
 import javafx.collections.ObservableList;
@@ -45,6 +45,7 @@ public class Main extends Application {
         try {
             root = fxmlLoader.load();
             controller.initializeFirstTab();
+
 
             // handle clicking close box of the window
             primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {

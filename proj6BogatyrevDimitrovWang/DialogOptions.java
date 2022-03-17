@@ -1,17 +1,16 @@
 /*
- * File: DialogOptions.java
- * Names: Philipp Bogatyrev, Erik Cohen, Ricky Peng
+ * File: Controller.java
+ * Names: Philipp Bogatyrev, Anton Dimitrov, Baron Wang
  * Class: CS 361
- * Project 5
- * Date: March 7
+ * Project 6
+ * Date: March 18
  */
 
-package src.proj5BogatyrevCohenPeng;
+package proj6BogatyrevDimitrovWang;
 
 
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.Dialog;
-import javafx.scene.control.Button;
 
 /**
  * Collection of prebuilt Dialog options
