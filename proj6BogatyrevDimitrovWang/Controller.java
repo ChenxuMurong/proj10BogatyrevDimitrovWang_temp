@@ -167,7 +167,7 @@ public class Controller {
 
         if (!this.savedPaths.containsKey(getSelectedTab())){
             // if no file corresponding to this tab exists in savedPaths hashmap,
-            // do not compile and alert user
+            // stop compiling and alert user
             Alert compileBeforeSaveAlert = new Alert(Alert.AlertType.ERROR);
             compileBeforeSaveAlert.setHeaderText("Compilation Unsuccessful");
             compileBeforeSaveAlert.setContentText("Target file does not exist. Please" +
@@ -228,6 +228,13 @@ public class Controller {
     void handleRunButton(ActionEvent event) {
         if (getSelectedTab() == null) return;
         handleCompileButton(event);
+
+        if (!this.savedPaths.containsKey(getSelectedTab()))
+            // (same as handleCompileButton)
+            // if no file corresponding to this tab exists in savedPaths hashmap,
+            // abort and alert user
+            return;
+
 
         if(! cancel_compiler){
             File savedFile = new File(this.savedPaths.get(getSelectedTab()));

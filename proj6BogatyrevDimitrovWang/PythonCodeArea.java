@@ -1,9 +1,9 @@
 /*
- * File: PythonCodeArea.java
- * Names: Erik Cohen, Philipp Bogatyrev, Ricky Peng
+ * File: Controller.java
+ * Names: Philipp Bogatyrev, Anton Dimitrov, Baron Wang
  * Class: CS 361
- * Project 5
- * Date: March 7
+ * Project 6
+ * Date: March 18
  */
 
 package proj6BogatyrevDimitrovWang;

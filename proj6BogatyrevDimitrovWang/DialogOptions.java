@@ -26,7 +26,7 @@ public class DialogOptions {
         // create a new dialog
         Dialog dialog = new Dialog();
         dialog.setContentText("This is a code editor! \n\n "
-                + "Authors: Erik Cohen, Philipp Bogatyrev, Ricky Peng");
+                + "Authors: Anton Dimitrov, Philipp Bogatyrev, Baron Wang");
         // add a close button so that dialog closing rule is fulfilled
         dialog.getDialogPane().getButtonTypes().add(ButtonType.CLOSE);
         return dialog;
