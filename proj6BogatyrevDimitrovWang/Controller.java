@@ -147,7 +147,6 @@ public class Controller {
     */
     @FXML
     void handleCompileButton(ActionEvent event) {
-        if (getSelectedTab() == null) return; // Does nothing when no tab is open
         cancel_compiler = false;
         if (!selectedTabIsSaved()) {
             // prommts user to save before proceeding to compile
@@ -165,12 +164,25 @@ public class Controller {
                 return;
             }
         }
-        File savedFile = new File(this.savedPaths.get(getSelectedTab()));
-        try {
-            // t.join() blocks thread untill process ends. 
-            // Hangs GUI until current command /compile finishes 
-            Thread t;
 
+        if (!this.savedPaths.containsKey(getSelectedTab())){
+            // if no file corresponding to this tab exists in savedPaths hashmap,
+            // do not compile and alert user
+            Alert compileBeforeSaveAlert = new Alert(Alert.AlertType.ERROR);
+            compileBeforeSaveAlert.setHeaderText("Compilation Unsuccessful");
+            compileBeforeSaveAlert.setContentText("Target file does not exist. Please" +
+                    " check if this tab has been saved before trying again.");
+            compileBeforeSaveAlert.show();
+            return;
+        }
+
+
+        try {
+            File savedFile = new File(this.savedPaths.get(getSelectedTab()));
+
+            // t.join() blocks thread until process ends.
+            // Hangs GUI until current command/compile finishes
+            Thread t;
             t = runProcess("cd " + savedFile.getPath().replace(savedFile.getName(),""));
             t.join();
 
