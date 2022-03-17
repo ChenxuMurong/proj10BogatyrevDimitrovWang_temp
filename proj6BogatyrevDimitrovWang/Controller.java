@@ -99,12 +99,13 @@ public class Controller {
      * Initialize the first tab so that VirtualizedScrollPanes hold CodeArea in the tab
      */
     public void initializeFirstTab() {
+        // disable compile, run, and stop buttons
         runButton.setDisable(true);
         compileButton.setDisable(true);
         stopButton.setDisable(true);
 
+        // default code area: java
         JavaCodeArea javaCodeArea = new JavaCodeArea();
-        PythonCodeArea pythonCodeArea = new PythonCodeArea();
         CodeArea codeArea = javaCodeArea.getCodeArea();
         initialTab.setContent(new VirtualizedScrollPane<>(codeArea));
 
@@ -149,6 +150,7 @@ public class Controller {
         if (getSelectedTab() == null) return; // Does nothing when no tab is open
         cancel_compiler = false;
         if (!selectedTabIsSaved()) {
+            // prommts user to save before proceeding to compile
             Dialog dialog = DialogOptions.getUnsavedChangesDialog(
                     getSelectedTab().getText(), "compile");
 
@@ -168,8 +170,6 @@ public class Controller {
             // t.join() blocks thread untill process ends. 
             // Hangs GUI until current command /compile finishes 
             Thread t;
-            t = runProcess("pwd");
-            t.join(); 
 
             t = runProcess("cd " + savedFile.getPath().replace(savedFile.getName(),""));
             t.join();
