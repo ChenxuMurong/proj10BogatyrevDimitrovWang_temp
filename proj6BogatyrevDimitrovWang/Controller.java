@@ -120,6 +120,7 @@ public class Controller {
                     VirtualizedScrollPane vsp;
                     switch(langBox.getSelectionModel().getSelectedItem().toString()){
                         case "Java":
+                            compileButton.disableProperty().bind(noTabs());
                             JavaCodeArea javaCodeArea = new JavaCodeArea();
                             vsp = (VirtualizedScrollPane) getSelectedTab().getContent();
                             oldArea = (CodeArea) vsp.getContent();
@@ -127,6 +128,8 @@ public class Controller {
                             getSelectedTab().setContent(new VirtualizedScrollPane<>(javaCodeArea.getCodeArea()));
                             break;
                         case "Python":
+                            compileButton.disableProperty().unbind();
+                            compileButton.setDisable(true);
                             PythonCodeArea pythonCodeArea = new PythonCodeArea();
                             vsp = (VirtualizedScrollPane) getSelectedTab().getContent();
                             oldArea = (CodeArea) vsp.getContent();
@@ -568,7 +571,15 @@ public class Controller {
         FileChooser fileChooser = new FileChooser();
         List<String> extensionList = Arrays.asList(new String[]{"*.txt", "*.fxml", "*.css", "*.java"});
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Text Files", extensionList));
+                //new FileChooser.ExtensionFilter("Text Files", extensionList));
+                new FileChooser.ExtensionFilter("Text Files", extensionList),
+                new FileChooser.ExtensionFilter("FXML Files", extensionList),
+                new FileChooser.ExtensionFilter("CSS Files", extensionList),
+                new FileChooser.ExtensionFilter("Java Files", extensionList));
+
+
+
+
         File fileToSave = fileChooser.showSaveDialog(tabPane.getScene().getWindow());
         // if user did not choose CANCEL
         if (fileToSave != null) {
