@@ -30,7 +30,8 @@
 <?import javafx.collections.FXCollections?>
 <?import java.lang.String?>
 
-<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/17"
+            xmlns:fx="http://javafx.com/fxml/1">
     <children>
         <!-- make menu bar expand to fill the window if user resizes window  -->
         <MenuBar AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -68,8 +69,6 @@
 
                         <MenuItem accelerator="Shortcut+Q" mnemonicParsing="false" 
                             onAction="#handleExit" text="Exit" />
-
-                        <SeparatorMenuItem mnemonicParsing="false" />
                     </items>
                 </Menu>
                 <!-- Edit menu also has 6 items  -->
@@ -95,7 +94,6 @@
                             mnemonicParsing="false" onAction="#handleSelectAll" 
                             text="Select all" />
 
-                        <SeparatorMenuItem mnemonicParsing="false" />
                     </items>
                 </Menu>
             </menus>

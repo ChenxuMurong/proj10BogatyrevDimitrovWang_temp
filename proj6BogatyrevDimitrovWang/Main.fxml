@@ -69,8 +69,6 @@
 
                         <MenuItem accelerator="Shortcut+Q" mnemonicParsing="false" 
                             onAction="#handleExit" text="Exit" />
-
-                        <SeparatorMenuItem mnemonicParsing="false" />
                     </items>
                 </Menu>
                 <!-- Edit menu also has 6 items  -->
@@ -96,7 +94,6 @@
                             mnemonicParsing="false" onAction="#handleSelectAll" 
                             text="Select all" />
 
-                        <SeparatorMenuItem mnemonicParsing="false" />
                     </items>
                 </Menu>
             </menus>
