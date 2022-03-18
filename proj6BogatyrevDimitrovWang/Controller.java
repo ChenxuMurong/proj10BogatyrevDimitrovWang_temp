@@ -92,7 +92,7 @@ public class Controller {
     // Fields for managing compiler and console processes
     private ExecutorService executor = Executors.newSingleThreadExecutor();
     private ProcessBuilder processBuilder = new ProcessBuilder();
-    private Boolean cancel_compiler = false;
+    private boolean cancel_compiler = false;
     private String outStreamCommand = "";
 
     /**
@@ -678,13 +678,13 @@ public class Controller {
      */
     private Thread runProcess(String command) throws Exception {
         processBuilder.command("bash", "-c", command).redirectErrorStream(true);
-        Boolean compilingCommand = command.startsWith("javac");
+        boolean compilingCommand = command.startsWith("javac");
         // new thread to read process results
         Thread t = new Thread(new Runnable() {
             // start process and read from input stream
             public void run(){
                 stopButton.setDisable(false);
-                Boolean compilerError = false;
+                boolean compilerError = false;
                 Process process;
                 try {
                     process = processBuilder.start();
