@@ -423,7 +423,10 @@ public class Controller {
         fileChooser.setInitialDirectory(initialDir);
         List<String> extensionList = Arrays.asList(new String[]{"*.txt", "*.fxml", "*.css", "*.java"});
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Text Files", extensionList));
+                        new FileChooser.ExtensionFilter("Text Files", extensionList),
+                        new FileChooser.ExtensionFilter("FXML Files", extensionList),
+                        new FileChooser.ExtensionFilter("CSS Files", extensionList),
+                        new FileChooser.ExtensionFilter("Java Files", extensionList));
         File selectedFile = fileChooser.showOpenDialog(tabPane.getScene().getWindow());
         // if user selects a file (instead of pressing cancel button
         if (selectedFile != null) {
