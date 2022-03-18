@@ -8,12 +8,7 @@
 
 package proj6BogatyrevDimitrovWang;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStream;
+import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
@@ -33,6 +28,8 @@ import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.Priority;
 import javafx.stage.FileChooser;
 import javafx.scene.control.Button;
 import javafx.scene.input.KeyEvent;
@@ -40,7 +37,6 @@ import javafx.scene.input.KeyEvent;
 import org.fxmisc.flowless.VirtualizedScrollPane;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.StyleClassedTextArea;
-import java.io.Reader;
 
 /**
  * Controller class contains handler methods for buttons and menu items
@@ -143,6 +139,43 @@ public class Controller {
     }
 
     /**
+     * Helper method to display error message to user when an exception is thrown
+     *
+     * @type this type is default since main need to use it to print possible exception message
+     */
+    void exceptionAlert(Exception ex){
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        ex.printStackTrace(pw);
+        pw.close();
+        String exceptionText = sw.toString();
+
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Exception Alert");
+        alert.setHeaderText(exceptionText.split("\\s+")[0]);
+        alert.setContentText("An exception has been thrown.");
+        Label label = new Label("The exception stacktrace is:");
+
+        TextArea textArea = new TextArea(exceptionText);
+        textArea.setEditable(false);
+        textArea.setWrapText(true);
+
+        textArea.setMaxWidth(Double.MAX_VALUE);
+        textArea.setMaxHeight(Double.MAX_VALUE);
+        GridPane.setVgrow(textArea, Priority.ALWAYS);
+        GridPane.setHgrow(textArea, Priority.ALWAYS);
+
+        GridPane expContent = new GridPane();
+        expContent.setMaxWidth(Double.MAX_VALUE);
+        expContent.add(label, 0, 0);
+        expContent.add(textArea, 0, 1);
+
+        alert.getDialogPane().setExpandableContent(expContent);
+
+        alert.showAndWait();
+    }
+
+    /**
      * 1. Save dialog for unsaved files
      * 2. compiles the file currently open (unless cancelled)
      *
@@ -198,10 +231,7 @@ public class Controller {
             t.join();
 
         } catch (Exception e) {
-            Alert alertBox = new Alert(Alert.AlertType.ERROR);
-            alertBox.setHeaderText("Process Interrupted");
-            alertBox.setContentText(e.toString());
-            alertBox.show();
+            exceptionAlert(e);
         }
     }
 
@@ -252,10 +282,7 @@ public class Controller {
                 runProcess("java " + "-cp " + pathWithoutFile + " " + fileWithoutExtension);
 
             } catch (Exception e) {
-                Alert alertBox = new Alert(Alert.AlertType.ERROR);
-                alertBox.setHeaderText("Process Interrupted");
-                alertBox.setContentText(e.toString());
-                alertBox.show();
+                exceptionAlert(e);
             }
         }
     }
@@ -418,11 +445,8 @@ public class Controller {
 
                 //getSelectedTextBox().setFile(File(selectedFile.getPath()));
 
-            } catch (IOException e) {
-                Alert alertBox = new Alert(Alert.AlertType.ERROR);
-                alertBox.setHeaderText("File Opening Error");
-                alertBox.setContentText(e.toString());
-                alertBox.show();
+            } catch (Exception e) {
+                exceptionAlert(e);
             }
         }
     }
@@ -544,11 +568,8 @@ public class Controller {
                 fw.close();
                 // update savedContents field
                 this.savedContents.put(getSelectedTab(), getSelectedTextBox().getText());
-            } catch (IOException e) {
-                Alert alertBox = new Alert(Alert.AlertType.ERROR);
-                alertBox.setHeaderText("File Saving Error");
-                alertBox.setContentText("File was not saved successfully.");
-                alertBox.show();
+            } catch (Exception e) {
+                exceptionAlert(e);
             }
         }
         // if text in selected tab was not loaded from a file nor ever saved to a file
@@ -594,11 +615,8 @@ public class Controller {
                 this.getSelectedTab().setText(fileToSave.getName());
                 Tooltip t = new Tooltip(fileToSave.getPath());
                 this.getSelectedTab().setTooltip(t);
-            } catch (IOException e) {
-                Alert alertBox = new Alert(Alert.AlertType.ERROR);
-                alertBox.setHeaderText("File Saving Error");
-                alertBox.setContentText("File was not saved successfully.");
-                alertBox.show();
+            } catch (Exception e) {
+                exceptionAlert(e);
             }
         }
     }
@@ -702,11 +720,8 @@ public class Controller {
                                     }
                                     outStream.flush();
                                     result = "";
-                                } catch (IOException e) {
-                                    Alert alertBox = new Alert(Alert.AlertType.ERROR);
-                                    alertBox.setHeaderText("Command Line Error");
-                                    alertBox.setContentText(e.toString());
-                                    alertBox.show();
+                                } catch (Exception e) {
+                                    exceptionAlert(e);
                                 }
                             }
                         }
@@ -739,12 +754,8 @@ public class Controller {
                             });
                         }//compilerError
                     } //compilingCommand
-                } catch (IOException e) {
- 
-                    Alert alertBox = new Alert(Alert.AlertType.ERROR);
-                    alertBox.setHeaderText("Command Line Error");
-                    alertBox.setContentText( e.toString() );
-                    alertBox.show();
+                } catch (Exception e) {
+                    exceptionAlert(e);
                 }
             }// run
         });// runnable
