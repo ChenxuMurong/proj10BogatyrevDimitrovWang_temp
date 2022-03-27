@@ -79,6 +79,7 @@ public class Controller {
     @FXML
     private ComboBox langBox;
 
+    private FileMenuController fileController = new FileMenuController();
     // List of saved tabs and their content
     private HashMap<Tab, String> savedContents = new HashMap<>();
     // List of saved tabs and their saving path
@@ -107,72 +108,6 @@ public class Controller {
 
         compileButton.disableProperty().bind(noTabs());
         runButton.disableProperty().bind(noTabs());
-
-        langBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
-            @Override
-            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
-                if (oldValue != newValue){
-                    CodeArea oldArea;
-                    VirtualizedScrollPane vsp;
-                    switch(langBox.getSelectionModel().getSelectedItem().toString()){
-                        case "Java":
-                            compileButton.disableProperty().bind(noTabs());
-                            JavaCodeArea javaCodeArea = new JavaCodeArea();
-                            vsp = (VirtualizedScrollPane) getSelectedTab().getContent();
-                            oldArea = (CodeArea) vsp.getContent();
-                            javaCodeArea.getCodeArea().replaceText(oldArea.getText());
-                            getSelectedTab().setContent(new VirtualizedScrollPane<>(javaCodeArea.getCodeArea()));
-                            break;
-                        case "Python":
-                            compileButton.disableProperty().unbind();
-                            compileButton.setDisable(true);
-                            PythonCodeArea pythonCodeArea = new PythonCodeArea();
-                            vsp = (VirtualizedScrollPane) getSelectedTab().getContent();
-                            oldArea = (CodeArea) vsp.getContent();
-                            pythonCodeArea.getCodeArea().replaceText(oldArea.getText());
-                            getSelectedTab().setContent(new VirtualizedScrollPane<>(pythonCodeArea.getCodeArea()));
-                            break;
-                    }
-                }
-            }
-        });
-    }
-
-    /**
-     * Helper method to display error message to user when an exception is thrown
-     *
-     * @type this type is default since main need to use it to print possible exception message
-     */
-    void exceptionAlert(Exception ex){
-        StringWriter sw = new StringWriter();
-        PrintWriter pw = new PrintWriter(sw);
-        ex.printStackTrace(pw);
-        pw.close();
-        String exceptionText = sw.toString();
-
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Exception Alert");
-        alert.setHeaderText(exceptionText.split("\\s+")[0]);
-        alert.setContentText("An exception has been thrown.");
-        Label label = new Label("The exception stacktrace is:");
-
-        TextArea textArea = new TextArea(exceptionText);
-        textArea.setEditable(false);
-        textArea.setWrapText(true);
-
-        textArea.setMaxWidth(Double.MAX_VALUE);
-        textArea.setMaxHeight(Double.MAX_VALUE);
-        GridPane.setVgrow(textArea, Priority.ALWAYS);
-        GridPane.setHgrow(textArea, Priority.ALWAYS);
-
-        GridPane expContent = new GridPane();
-        expContent.setMaxWidth(Double.MAX_VALUE);
-        expContent.add(label, 0, 0);
-        expContent.add(textArea, 0, 1);
-
-        alert.getDialogPane().setExpandableContent(expContent);
-
-        alert.showAndWait();
     }
 
     /**
@@ -184,7 +119,7 @@ public class Controller {
     @FXML
     void handleCompileButton(ActionEvent event) {
         cancel_compiler = false;
-        if (!selectedTabIsSaved()) {
+        if (!this.fileController.selectedTabIsSaved(tabPane)) {
             // prompts user to save before proceeding to compile
             Dialog dialog = DialogOptions.getUnsavedChangesDialog(
                     getSelectedTab().getText(), "compile");
@@ -201,7 +136,7 @@ public class Controller {
             }
         }
 
-        if (!this.savedPaths.containsKey(getSelectedTab())){
+        if (!this.fileController.getSavedPaths().containsKey(getSelectedTab())){
             // if no file corresponding to this tab exists in savedPaths hashmap,
             // stop compiling and alert user
             cancel_compiler = true;
@@ -215,7 +150,7 @@ public class Controller {
 
 
         try {
-            File savedFile = new File(this.savedPaths.get(getSelectedTab()));
+            File savedFile = new File(this.fileController.getSavedPaths().get(getSelectedTab()));
 
             // t.join() blocks thread until process ends.
             // Hangs GUI until current command/compile finishes
@@ -231,7 +166,7 @@ public class Controller {
             t.join();
 
         } catch (Exception e) {
-            exceptionAlert(e);
+            DialogOptions.exceptionAlert(e);
         }
     }
 
@@ -261,29 +196,59 @@ public class Controller {
     @FXML
     void handleRunButton(ActionEvent event) {
         if (getSelectedTab() == null) return;
-        handleCompileButton(event);
 
 
         if(! cancel_compiler){
-            File savedFile = new File(this.savedPaths.get(getSelectedTab()));
-            try {
-                // prepare classpath location
-                int endOfPath = 
-                    savedFile.getPath().length() - savedFile.getName().length();
+            File savedFile = new File(this.fileController.getSavedPaths().get(getSelectedTab()));
+            switch(langBox.getSelectionModel().getSelectedItem().toString()){
+                case "Java":
+                    try {
+                        handleCompileButton(event);
+                        // prepare classpath location
+                        int endOfPath =
+                                savedFile.getPath().length() - savedFile.getName().length();
 
-                String pathWithoutFile = savedFile.getPath().substring(0, endOfPath);
+                        String pathWithoutFile = savedFile.getPath().substring(0, endOfPath);
 
-                String fileWithoutExtension = 
-                    savedFile.getName().substring(0,savedFile.getName().length()-5);
+                        String fileWithoutExtension =
+                                savedFile.getName().substring(0,savedFile.getName().length()-5);
 
-                console.appendText(
-                    "java " + "-cp " + pathWithoutFile + " " 
-                    + fileWithoutExtension + "\n");
-                runProcess("java " + "-cp " + pathWithoutFile + " " + fileWithoutExtension);
+                        console.appendText(
+                                "java " + "-cp " + pathWithoutFile + " "
+                                        + fileWithoutExtension + "\n");
+                        runProcess("java " + "-cp " + pathWithoutFile + " " + fileWithoutExtension);
 
-            } catch (Exception e) {
-                exceptionAlert(e);
+                    } catch (Exception e) {
+                        Alert alertBox = new Alert(Alert.AlertType.ERROR);
+                        alertBox.setHeaderText("Process Interrupted");
+                        alertBox.setContentText(e.toString());
+                        alertBox.show();
+                    }
+                case "Python":
+                    try {
+                        // prepare classpath location
+                        int endOfPath =
+                                savedFile.getPath().length() - savedFile.getName().length();
+
+                        String pathWithoutFile = savedFile.getPath().substring(0, endOfPath);
+
+                        String fileWithoutExtension =
+                                savedFile.getName().substring(0,savedFile.getName().length()-3);
+
+                        console.appendText(
+                                "python3 " + pathWithoutFile +
+                                        savedFile.getName() + "\n");
+                        runProcess("python3 " + pathWithoutFile
+                                + savedFile.getName() + "\n");
+
+                    } catch (Exception e) {
+                        Alert alertBox = new Alert(Alert.AlertType.ERROR);
+                        alertBox.setHeaderText("Process Interrupted");
+                        alertBox.setContentText(e.toString());
+                        alertBox.show();
+                    }
             }
+
         }
     }
 
@@ -309,6 +274,35 @@ public class Controller {
                 tabPane.getSelectionModel().select(0);
                 handleClose(new ActionEvent());
                 event.consume();
+            }
+        });
+
+        langBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {
+            @Override
+            public void changed(ObservableValue observable, Object oldValue, Object newValue) {
+                if (oldValue != newValue){
+                    CodeArea oldArea;
+                    VirtualizedScrollPane vsp;
+                    switch(langBox.getSelectionModel().getSelectedItem().toString()){
+                        case "Java":
+                            compileButton.disableProperty().bind(noTabs());
+                            JavaCodeArea javaCodeArea = new JavaCodeArea();
+                            vsp = (VirtualizedScrollPane) getSelectedTab().getContent();
+                            oldArea = (CodeArea) vsp.getContent();
+                            javaCodeArea.getCodeArea().replaceText(oldArea.getText());
+                            getSelectedTab().setContent(new VirtualizedScrollPane<>(javaCodeArea.getCodeArea()));
+                            break;
+                        case "Python":
+                            compileButton.disableProperty().unbind();
+                            compileButton.setDisable(true);
+                            PythonCodeArea pythonCodeArea = new PythonCodeArea();
+                            vsp = (VirtualizedScrollPane) getSelectedTab().getContent();
+                            oldArea = (CodeArea) vsp.getContent();
+                            pythonCodeArea.getCodeArea().replaceText(oldArea.getText());
+                            getSelectedTab().setContent(new VirtualizedScrollPane<>(pythonCodeArea.getCodeArea()));
+                            break;
+                    }
+                }
             }
         });
 
@@ -375,33 +369,7 @@ public class Controller {
      */
     @FXML
     private void handleNew(ActionEvent event) {
-        // create a new tab
-        this.newTabID++;
-        Tab newTab = new Tab("Untitled-" + this.newTabID);
-        newTab.setOnCloseRequest(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                handleClose(new ActionEvent());
-                event.consume();
-            }
-        });
-
-        // create a code area
-        JavaCodeArea javaCodeArea = new JavaCodeArea();
-        CodeArea codeArea = javaCodeArea.getCodeArea();
-        newTab.setContent(new VirtualizedScrollPane<>(codeArea));
-        // add new tab to the tabPane
-        tabPane.getTabs().add(newTab);
-        // make the newly created tab the topmost
-        tabPane.getSelectionModel().selectLast();
-        newTab.setOnCloseRequest(new EventHandler<Event>() {
-            @Override
-            public void handle(Event event) {
-                tabPane.getSelectionModel().select(newTab);
-                handleClose(new ActionEvent());
-                event.consume();
-            }
-        });
+        this.fileController.handleNew(event, tabPane);
     }
 
     /**
@@ -413,45 +381,7 @@ public class Controller {
      */
     @FXML
     private void handleOpen(ActionEvent event) {
-        // create a new file chooser
-        FileChooser fileChooser = new FileChooser();
-        File initialDir = new File("./saved");
-        // handles the case if ./saved directory does not exist
-        if (!initialDir.exists()) {
-            initialDir = new File("./");
-        }
-        fileChooser.setInitialDirectory(initialDir);
-        List<String> extensionList = Arrays.asList(new String[]{"*.txt", "*.fxml", "*.css", "*.java"});
-        fileChooser.getExtensionFilters().addAll(
-                        new FileChooser.ExtensionFilter("Text Files", extensionList),
-                        new FileChooser.ExtensionFilter("FXML Files", extensionList),
-                        new FileChooser.ExtensionFilter("CSS Files", extensionList),
-                        new FileChooser.ExtensionFilter("Java Files", extensionList));
-        File selectedFile = fileChooser.showOpenDialog(tabPane.getScene().getWindow());
-        // if user selects a file (instead of pressing cancel button
-        if (selectedFile != null) {
-            // open a new tab
-            this.handleNew(event);
-            // set text/name of the tab to the filename
-            this.getSelectedTab().setText(selectedFile.getName());
-            Tooltip t = new Tooltip(selectedFile.getPath());
-            this.getSelectedTab().setTooltip(t);
-            this.newTabID--; // no need to increment
-            try {
-                // reads the file content to a String
-                String content = new String(Files.readAllBytes(
-                        Paths.get(selectedFile.getPath())));
-                this.getSelectedTextBox().replaceText(content);
-                // update savedContents field
-                this.savedContents.put(getSelectedTab(), content);
-                this.savedPaths.put(getSelectedTab(), selectedFile.getPath());
-
-                //getSelectedTextBox().setFile(File(selectedFile.getPath()));
-
-            } catch (Exception e) {
-                exceptionAlert(e);
-            }
-        }
+        this.fileController.handleOpen(event, tabPane);
     }
 
     /**
@@ -464,48 +394,7 @@ public class Controller {
     @FXML
     public void handleClose(ActionEvent event) {
         // call helper method
-        this.closeSelectedTab(event, "close");
-    }
-
-    /**
-     * Helper method that handles unsaved text and closes the tab. Shows a dialog
-     * if the text gets modified since its last save or has never been saved.
-     * Closes the tab if the text has been saved or user confirms.
-     *
-     * @param event   An ActionEvent object that gives information about the event
-     *                and its source.
-     * @param exiting a string used in Dialog modification. represents if the
-     *                program
-     *                is exiting or simply closing a single tab
-     *
-     * @return Optional the Optional object returned by dialog.showAndWait().
-     *         returns null if tab text is already saved.
-     */
-    private Optional<ButtonType> closeSelectedTab(ActionEvent event, String exiting) {
-        // if content is not saved
-        if (!selectedTabIsSaved()) {
-            Dialog dialog = DialogOptions.getUnsavedChangesDialog(
-                    getSelectedTab().getText(), exiting);
-
-            Optional<ButtonType> result = dialog.showAndWait();
-            // call handleSave() if user chooses YES
-            if (result.get() == ButtonType.YES) {
-                this.handleSave(event);
-                // keep the tab if the save is unsuccessful (eg. canceled)
-                if (!this.selectedTabIsSaved()) {
-                    return result;
-                }
-            }
-            // quit the dialog and keep selected tab if user chooses CANCEL
-            else if (result.get() == ButtonType.CANCEL) {
-                return result;
-            }
-        }
-        // remove tab from tabPane if text is saved or user chooses NO
-        this.savedContents.remove(getSelectedTab());
-        this.savedPaths.remove(getSelectedTab());
-        tabPane.getTabs().remove(getSelectedTab());
-        return Optional.empty();
+        this.fileController.closeSelectedTab(event, "close", tabPane);
     }
 
     /**
@@ -518,37 +407,11 @@ public class Controller {
      */
     @FXML
     private void handleExit(ActionEvent event) {
-        // start while loop iteration from the last tab
-        tabPane.getSelectionModel().selectLast();
-        // loop through the tabs in tabPane
-        while (tabPane.getTabs().size() > 0) {
-            // try close the currently selected tab
-            Optional<ButtonType> result = closeSelectedTab(event, "exit");
-            // if the user chooses Cancel at any time, then the exiting is canceled,
-            // and the application stays running.
-            if (result.isPresent() && result.get() == ButtonType.CANCEL) {
-                return;
-            }
-        }
-        // exit if all tabs are closed
-        System.exit(0);
+        this.fileController.handleExit(event, tabPane);
+
     }
 
-    /**
-     * Helper method that checks if the text in the selected tab is saved.
-     *
-     * @return boolean whether the text in the selected tab is saved.
-     */
-    private boolean selectedTabIsSaved() {
-        // if tab name has been changed and current text matches with
-        // the saved text in record
-        if (this.savedContents.containsKey(getSelectedTab()) &&
-                getSelectedTextBox().getText().equals(
-                        this.savedContents.get(getSelectedTab()))) {
-            return true;
-        }
-        return false;
-    }
+
 
     /**
      * Handler method for menu bar item Save. Behaves like Save as... if the text
@@ -560,25 +423,7 @@ public class Controller {
      */
     @FXML
     private void handleSave(ActionEvent event) {
-        // if the text has been saved before
-        if (this.savedContents.containsKey(getSelectedTab())) {
-            // create a File object for the corresponding text file
-            File savedFile = new File(this.savedPaths.get(getSelectedTab()));
-            try {
-                // write the new content to the text file
-                FileWriter fw = new FileWriter(savedFile);
-                fw.write(getSelectedTextBox().getText());
-                fw.close();
-                // update savedContents field
-                this.savedContents.put(getSelectedTab(), getSelectedTextBox().getText());
-            } catch (Exception e) {
-                exceptionAlert(e);
-            }
-        }
-        // if text in selected tab was not loaded from a file nor ever saved to a file
-        else {
-            this.handleSaveAs(event);
-        }
+        this.fileController.handleSave(event, tabPane);
     }
 
     /**
@@ -591,37 +436,7 @@ public class Controller {
      */
     @FXML
     private void handleSaveAs(ActionEvent event) {
-        // create a new fileChooser
-        FileChooser fileChooser = new FileChooser();
-        List<String> extensionList = Arrays.asList(new String[]{"*.txt", "*.fxml", "*.css", "*.java"});
-        fileChooser.getExtensionFilters().addAll(
-                //new FileChooser.ExtensionFilter("Text Files", extensionList));
-                new FileChooser.ExtensionFilter("Text Files", extensionList),
-                new FileChooser.ExtensionFilter("FXML Files", extensionList),
-                new FileChooser.ExtensionFilter("CSS Files", extensionList),
-                new FileChooser.ExtensionFilter("Java Files", extensionList));
-
-
-
-
-        File fileToSave = fileChooser.showSaveDialog(tabPane.getScene().getWindow());
-        // if user did not choose CANCEL
-        if (fileToSave != null) {
-            try {
-                // save file
-                FileWriter fw = new FileWriter(fileToSave);
-                fw.write(this.getSelectedTextBox().getText());
-                fw.close();
-                // update savedContents field and tab text
-                this.savedContents.put(getSelectedTab(), getSelectedTextBox().getText());
-                this.savedPaths.put(getSelectedTab(), fileToSave.getPath());
-                this.getSelectedTab().setText(fileToSave.getName());
-                Tooltip t = new Tooltip(fileToSave.getPath());
-                this.getSelectedTab().setTooltip(t);
-            } catch (Exception e) {
-                exceptionAlert(e);
-            }
-        }
+        this.fileController.handleSaveAs(event, tabPane);
     }
 
     /**
@@ -724,7 +539,7 @@ public class Controller {
                                     outStream.flush();
                                     result = "";
                                 } catch (Exception e) {
-                                    exceptionAlert(e);
+                                    DialogOptions.exceptionAlert(e);
                                 }
                             }
                         }
@@ -758,7 +573,7 @@ public class Controller {
                         }//compilerError
                     } //compilingCommand
                 } catch (Exception e) {
-                    exceptionAlert(e);
+                    DialogOptions.exceptionAlert(e);
                 }
             }// run
         });// runnable
@@ -767,4 +582,5 @@ public class Controller {
         stopButton.setDisable(true);
         return t;
     }
+
 }
